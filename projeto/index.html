@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo - Matador de Monstro</title>
+    
+    <!--CSS ONLY-->
+    <link rel="stylesheet" href="./style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lumanosimo&display=swap" rel="stylesheet">
+
+    <!--JAVASCRIPT ONLY-->
+    <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<!--JOGO MATADOR DE MONSTROS-->
+
+<body>
+
+    <div id="app">
+
+        <!--TUTORIAL-->
+        <div class="panel tutorial">
+            <h1>TUTORIAL</h1>
+            <hr>
+            <li>Use o botão "ATAQUE" para causar dano ao monstro.</li>
+            <li>Quando você causar dano ao monstro, ele vai fazer o contra-ataque, causando dano em você.</li>
+            <li>Você pode, opcionalmente, usar o botão de "ATAQUE ESPECIAL", para tentar causar mais dano ao monstro.
+                O monstro irá contra-atacar.
+            </li>
+            <li><strong>Vence quem zerar a barra de vida do oponente primeiro</strong></li>
+            <li>Aperfeiçoe sua técnica de batalha jogando várias vezes!</li>
+        </div>
+
+        <!--SCORES-->
+        <div class="panel scores">
+            <!--JOGADOR-->
+            <div class="score">
+                <h2>JOGADOR</h2>
+                <div class="life-bar">
+                    <div class="life"
+                        :class="{danger: playerLife < 30}"
+                        :style="{width: playerLife + '%'}">
+                    </div>
+                </div>
+                <div>
+                    {{ playerLife }}%
+                </div>
+            </div>
+
+            <!--MONSTRO-->
+            <div class="score">
+                <h2>MONSTRO</h2>
+                <div class="life-bar">
+                    <div class="life"
+                        :class="{danger: monsterLife < 30}"
+                        :style="{width: monsterLife + '%'}">
+                    </div>
+                </div>
+                <div>{{ monsterLife }}%</div>
+            </div>
+        </div>
+
+
+        <!--RESULTADOS-->
+        <div v-if="hasResult" class="panel result">
+            <div v-if="monsterLife == 0" class="win">Você ganhou!!! :)</div>
+            <div v-else class="lose">Você perdeu!!! :(</div>
+        </div>
+
+        <!--BOTÕES-->
+        <div class="panel buttons">
+            <template v-if="running">
+                <button @click="attack(false)"
+                    class="btn attack">ATAQUE</button>
+                <button @click="attack(true)"
+                    class="btn especial-attack">ATAQUE ESPECIAL</button>
+                <button @click="healAndHurt"
+                    class="btn heal">CURAR</button>
+                <button @click="running = false"
+                    class="btn give-up">DESISTIR</button>
+            </template>
+            <button v-else @click="startGame"
+                class="btn new-game">INICIAR JOGO</button>
+        </div>
+
+        <!--LOGS-->
+        <div v-if="logs.length"
+            class="panel logs">
+            <ul>
+                <li v-for="log in logs"
+                :class="log.cls"
+                class="log">{{ log.text }}</li>
+            </ul>
+        </div>
+
+    </div>
+    <script src="app.js"></script>   
+
+</body>
+</html>
